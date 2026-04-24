@@ -53,3 +53,4 @@ Simply open `frontend/index.html` using a local web server (e.g., VS Code Live S
 
 ## License
 Developed for educational purposes as a Final Year Project.
+"# docwise-summerization-project" 
