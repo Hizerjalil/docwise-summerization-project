@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOCWISE — Summarizer</title>
+    <link rel="stylesheet" href="css/work.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <img src="assets/Asset 1.png" alt="DOCWISE Logo" class="nav-logo-img">
+        </div>
+        <div class="nav-right">
+            <span class="user-greeting" id="userGreeting">Hello, User</span>
+            <a href="admin.html" class="btn-nav" id="adminLink" style="display:none; text-decoration:none;">
+                <i class="fa-solid fa-user-shield"></i> Admin
+            </a>
+            <button class="btn-nav" id="logoutBtn">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </button>
+        </div>
+    </nav>
+
+    <!-- ===== LAYOUT ===== -->
+    <div class="app-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            </div>
+            <div class="sidebar-list" id="sidebarList">
+                <!-- dynamically populated -->
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="main-area">
+
+            <!-- TOP BAR -->
+            <div class="top-bar">
+                <button class="btn-new-chat" id="newChatBtn">
+                    <i class="fa-solid fa-plus"></i> New Chats
+                </button>
+            </div>
+
+            <!-- ===== INPUT TABS VIEW ===== -->
+            <div id="uploadView" class="view active">
+
+                <!-- TAB SWITCHER -->
+                <div class="tab-bar">
+                    <button class="tab-btn active" id="tabUpload" onclick="switchTab('upload')">
+                        <i class="fa-solid fa-file-arrow-up"></i> Upload Document
+                    </button>
+                    <button class="tab-btn" id="tabText" onclick="switchTab('text')">
+                        <i class="fa-solid fa-keyboard"></i> Paste Text
+                    </button>
+                </div>
+
+                <!-- TAB: UPLOAD DOCUMENT -->
+                <div id="panelUpload" class="tab-panel active">
+                    <div class="upload-zone" id="uploadZone">
+                        <input type="file" id="fileInput" accept=".pdf,.txt,.doc,.docx" hidden>
+                        <button class="upload-plus-btn" onclick="document.getElementById('fileInput').click()">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                        <h2 class="upload-title">UPLOAD YOUR DOCUMENT</h2>
+                        <p class="upload-hint">* PDF, TXT, DOC files supported. Drag & drop or click +</p>
+                        <p class="file-name-display" id="fileNameDisplay"></p>
+                    </div>
+                </div>
+
+                <!-- TAB: PASTE TEXT -->
+                <div id="panelText" class="tab-panel">
+                    <div class="text-paste-box">
+                        <textarea
+                            id="pasteTextArea"
+                            class="paste-textarea"
+                            placeholder="Paste or type your text here to summarize it...&#10;&#10;Example: Paste a news article, research paper, assignment, or any long text and click SUMMARIZE NOW."
+                            spellcheck="true"
+                        ></textarea>
+                        <div class="char-count-row">
+                            <span id="charCount">0 characters</span>
+                            <button class="btn-clear-text" onclick="clearPasteText()">
+                                <i class="fa-solid fa-xmark"></i> Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUMMARY DETAIL OPTIONS -->
+                <div class="summary-options">
+                    <label>Summary Length:</label>
+                    <div class="option-group" id="detailLevelGroup">
+                        <button class="option-btn active" data-level="concise">Short</button>
+                        <button class="option-btn" data-level="detailed">Detailed</button>
+                    </div>
+                </div>
+
+                <!-- SUMMARIZE BUTTON (shared) -->
+                <button class="btn-summarize" id="summarizeBtn">SUMMARIZE NOW</button>
+
+                <!-- OUTPUT BOX -->
+                <div class="output-box" id="outputBox">
+                    <p class="placeholder-text" id="outputPlaceholder">Your summarize text will be shown here</p>
+                    <div class="summary-text" id="summaryText" style="display:none;"></div>
+                </div>
+
+                <!-- DOWNLOAD ROW -->
+                <div class="action-row" id="actionRow" style="display:none;">
+                    <button class="btn-copy" id="copyBtn">
+                        <i class="fa-regular fa-copy"></i> Copy
+                    </button>
+                    <button class="btn-download" id="downloadBtn">
+                        <i class="fa-solid fa-download"></i> Download
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- ===== SAVED SUMMARY VIEW ===== -->
+            <div id="summaryView" class="view">
+                <div class="summary-view-header">
+                    <h3 id="summaryViewTitle">Summary Title</h3>
+                    <div class="summary-view-actions">
+                        <button class="btn-copy" id="copySummaryBtn">
+                            <i class="fa-regular fa-copy"></i> Copy
+                        </button>
+                        <button class="btn-delete-view" id="deleteSummaryBtn">
+                            <i class="fa-solid fa-trash"></i> Delete
+                        </button>
+                        <button class="btn-download-view" id="downloadSummaryBtn">
+                            <i class="fa-solid fa-download"></i> Download
+                        </button>
+                    </div>
+                </div>
+                <div class="output-box">
+                    <div class="summary-text" id="savedSummaryText"></div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="page-footer">
+        <p class="footer-left">DOCWISE is a Final Year Project developed for educational and research purposes.</p>
+        <p class="footer-right">&copy; 2026 DOCWISE &mdash; All Rights Reserved.</p>
+    </footer>
+
+    <!-- ===== LOGOUT MODAL ===== -->
+    <div class="modal-overlay" id="logoutModalOverlay">
+        <div class="modal-box">
+            <p>Are you sure to Logout?</p>
+            <div class="modal-btn-row">
+                <button class="btn btn-red" id="confirmLogout">Yes</button>
+                <button class="btn btn-gray" id="cancelLogout">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== DELETE MODAL ===== -->
+    <div class="modal-overlay" id="deleteModalOverlay">
+        <div class="modal-box">
+            <p>Are you sure to delete this Summary?</p>
+            <div class="modal-btn-row">
+                <button class="btn btn-red" id="confirmDelete">Yes</button>
+                <button class="btn btn-gray" id="cancelDelete">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast"></div>
+
+    <!-- LOADING OVERLAY -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p>Summarizing your document...</p>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

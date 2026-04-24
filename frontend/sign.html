@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOCWISE — Sign In / Register</title>
+    <link rel="stylesheet" href="css/sign.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- ===== BACKGROUND ===== -->
+    <div class="bg-overlay"></div>
+
+    <!-- ===== MAIN WRAPPER ===== -->
+    <div class="main-wrapper">
+
+        <!-- REGISTER FORM -->
+        <form class="card" id="registerForm" style="display: none;">
+            <h2>REGISTER</h2>
+
+            <div class="input-group">
+                <label for="regUser">Username</label>
+                <input type="text" id="regUser" placeholder="Enter Your Username" required>
+            </div>
+
+            <div class="input-group">
+                <label for="regEmail">Email</label>
+                <input type="email" id="regEmail" placeholder="Enter Your Email" required>
+            </div>
+
+            <div class="input-group">
+                <label for="regPhone">Phone Number</label>
+                <input type="tel" id="regPhone" placeholder="Enter Your Phone Number">
+            </div>
+
+            <div class="input-group pass-box">
+                <label for="regPass">Password</label>
+                <input type="password" id="regPass" placeholder="Enter Password" required>
+                <i class="fa-regular fa-eye toggle-btn" data-target="regPass"></i>
+            </div>
+
+            <div class="input-group pass-box">
+                <label for="regConf">Confirm Password</label>
+                <input type="password" id="regConf" placeholder="Rewrite your Password" required>
+                <i class="fa-regular fa-eye toggle-btn" data-target="regConf"></i>
+            </div>
+
+            <button type="submit" class="btn btn-blue" id="createAccountBtn">Create Account</button>
+            <p class="footer-link" id="goToLogin">Already have Account</p>
+        </form>
+
+        <!-- LOGIN FORM -->
+        <form class="card" id="loginForm">
+            <h2>LOG IN</h2>
+
+            <div class="input-group">
+                <label for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" placeholder="Enter Your Email" required>
+            </div>
+
+            <div class="input-group pass-box">
+                <label for="loginPass">Password</label>
+                <input type="password" id="loginPass" placeholder="Enter Password" required>
+                <i class="fa-regular fa-eye toggle-btn" data-target="loginPass"></i>
+            </div>
+
+            <button type="submit" class="btn btn-blue" id="loginBtn">Login</button>
+            <div class="auth-extra">
+                <p class="footer-link" id="goToRegister">Don't have Account</p>
+                <p class="footer-link forgot-link" id="openForgotModal">Forgot Password?</p>
+            </div>
+        </form>
+
+        <!-- RESET PASSWORD MODAL -->
+        <div class="modal-overlay" id="forgotModalOverlay">
+            <div class="card modal-card reset-card">
+                <button class="close-modal" id="closeForgotModal">&times;</button>
+                
+                <!-- Secure Reset Flow -->
+                <div id="resetStep1" class="reset-step active">
+                    <h3>Reset Password</h3>
+                    <p class="reset-desc">Enter your email and new password to reset.</p>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="resetEmail" placeholder="Email Address" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="resetNewPassword" placeholder="New Password" required>
+                    </div>
+                    <div class="input-group pass-box">
+                        <label for="newConf">Confirm New Password</label>
+                        <input type="password" id="newConf" placeholder="Confirm New Password" required>
+                        <i class="fa-regular fa-eye toggle-btn" data-target="newConf"></i>
+                    </div>
+                    <button type="button" class="btn btn-blue" id="resetPassBtn">Update Password</button>
+                    <p class="footer-link" id="backToStep1" style="text-align: center; margin-top: 1rem;">Back</p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- MODALS COLUMN -->
+        <div class="modals-column">
+            <div class="card modal-card" id="deleteModal">
+                <p>Are you sure to delete this Summary?</p>
+                <div class="btn-row">
+                    <button type="button" class="btn btn-red" id="confirmDeleteBtn">Yes</button>
+                    <button type="button" class="btn btn-gray" id="cancelDeleteBtn">No</button>
+                </div>
+            </div>
+
+            <div class="card modal-card" id="logoutModal">
+                <p>Are you sure to Logout?</p>
+                <div class="btn-row">
+                    <button type="button" class="btn btn-red" id="confirmLogoutBtn">Yes</button>
+                    <button type="button" class="btn btn-gray" id="cancelLogoutBtn">No</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="toast"></div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer" style="padding: 20px; text-align: center; color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+        <p>&copy; 2026 DOCWISE &mdash; All Rights Reserved.</p>
+    </footer>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+
+</html>

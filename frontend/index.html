@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOCWISE — AI Smart Document Summarizer</title>
+    <meta name="description"
+        content="DOCWISE is an AI-powered document summarizer. Upload your PDF, click Summarize, and get a clear summary in seconds.">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <img src="assets/Asset 1.png" alt="DOCWISE Logo" class="nav-logo-img">
+
+        </div>
+        <button class="btn-signup" onclick="window.location.href='sign.html'">Signup</button>
+    </nav>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>DOCWISE</h1>
+            <h2>AI Smart Document Summarizer</h2>
+            <p>Save time. Understand faster. Turn long documents into short, meaningful summaries in seconds.</p>
+            <button class="btn-primary" onclick="window.location.href='sign.html'">TRY SUMMARY NOW</button>
+        </div>
+    </section>
+
+    <!-- ===== HOW IT WORKS ===== -->
+    <section class="how-works">
+        <h2 class="section-heading">How Our Website Works</h2>
+
+        <div class="steps-timeline">
+            <div class="step-num">1</div>
+            <div class="step-line"></div>
+            <div class="step-num">2</div>
+            <div class="step-line"></div>
+            <div class="step-num">3</div>
+        </div>
+
+        <div class="steps-cards">
+            <div class="step-card">
+                <h3>Upload Document</h3>
+                <p>Upload your document or paste your content into the text box.</p>
+            </div>
+            <div class="step-card">
+                <h3>Click Summarize</h3>
+                <p>Our AI reads your text, understands key points, and prepares a clear summary.</p>
+            </div>
+            <div class="step-card">
+                <h3>Read or Download</h3>
+                <p>View your summary instantly. Save it in your account or copy it for later use.</p>
+            </div>
+        </div>
+
+        <div class="center-btn">
+            <button class="btn-primary" onclick="window.location.href='sign.html'">TRY SUMMARY NOW</button>
+        </div>
+    </section>
+
+    <!-- ===== WHY CHOOSE US ===== -->
+    <section class="why-choose">
+        <h2 class="section-heading">Why Choose Us</h2>
+        <div class="choose-grid">
+            <div class="choose-card">
+                <div class="choose-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                <h3>Simple & Easy to Use</h3>
+                <p>No technical knowledge required.</p>
+            </div>
+            <div class="choose-card">
+                <div class="choose-icon"><i class="fa-solid fa-bolt"></i></div>
+                <h3>Fast Results</h3>
+                <p>Get summaries within seconds.</p>
+            </div>
+            <div class="choose-card">
+                <div class="choose-icon"><i class="fa-solid fa-display"></i></div>
+                <h3>Clean Interface</h3>
+                <p>No ads, no distractions.</p>
+            </div>
+            <div class="choose-card">
+                <div class="choose-icon"><i class="fa-solid fa-users"></i></div>
+                <h3>Who Should Use</h3>
+                <p>Perfect for Student, Writer & Researcher.</p>
+            </div>
+            <div class="choose-card">
+                <div class="choose-icon"><i class="fa-solid fa-brain"></i></div>
+                <h3>Accurate AI Summaries</h3>
+                <p>Built to keep the main points clear.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TESTIMONIALS ===== -->
+    <section class="testimonials">
+        <h2 class="section-heading">Testimonials</h2>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <p>"Best tool for creating short notes from long text."</p>
+                <h4>Zeeshan Ahmad</h4>
+                <span>Content Writer</span>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <p>"DOCWISE helped me summarize research papers quickly."</p>
+                <h4>Hammad Ahmad</h4>
+                <span>Student</span>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <p>"I save hours when reviewing articles. Clean and simple tool."</p>
+                <h4>Arsalan</h4>
+                <span>Research Learner</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FAQ ===== -->
+    <section class="faq">
+        <h2 class="section-heading">FAQ</h2>
+        <div class="faq-list">
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    1. What is DOCWISE?
+                    <i class="fa-solid fa-chevron-down faq-icon"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>DOCWISE is a web tool that summarizes long documents into short, easy-to-understand text.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    2. Who can use it?
+                    <i class="fa-solid fa-chevron-down faq-icon"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Students, researchers, teachers, writers — anyone who reads long content.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    3. Does it change the meaning of my text?
+                    <i class="fa-solid fa-chevron-down faq-icon"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>No. It keeps the main ideas while removing extra details.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    4. Can I summarize any type of text?
+                    <i class="fa-solid fa-chevron-down faq-icon"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Yes — articles, assignments, reports, research papers, and more.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <p class="footer-left">DOCWISE is a Final Year Project developed for educational and research purposes.</p>
+        <p class="footer-right">© 2026 DOCWISE — All Rights Reserved.</p>
+    </footer>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+
+</html>
