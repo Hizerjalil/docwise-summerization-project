@@ -8,6 +8,12 @@ const { AppError } = require('../middleware/errorMiddleware');
 
 const generateOTP = () => crypto.randomInt(100000, 999999).toString();
 
+const isAdminEmail = (email) => {
+    if (!email) return false;
+    const adminEmails = (process.env.ADMIN_EMAILS || 'hizerjalil85@gmail.com').split(',').map(e => e.toLowerCase().trim());
+    return adminEmails.includes(email.toLowerCase().trim());
+};
+
 const signToken = (user) => {
     return jwt.sign(
         { 
@@ -36,7 +42,7 @@ exports.register = async (req, res, next) => {
             phone: phone?.trim(),
             password: hashedPassword,
             is_verified: true, // Setting true for now as requested
-            is_admin: email.toLowerCase().trim() === 'hizerjalil85@gmail.com'
+            is_admin: isAdminEmail(email)
         }, 'insertOne');
 
         res.status(201).json({ 
@@ -72,8 +78,8 @@ exports.login = async (req, res, next) => {
             return next(AppError.unauthorized('Invalid credentials'));
         }
 
-        // Special: Ensure owner is always admin on login
-        if (user.email === 'hizerjalil85@gmail.com' && !user.is_admin) {
+        // Special: Ensure owner/admins are always admin on login
+        if (isAdminEmail(user.email) && !user.is_admin) {
             await db.query('User', { _id: user._id, is_admin: true }, 'updateOne');
             user.is_admin = true;
         }
