@@ -11,8 +11,16 @@ const upload = multer({
     storage: multer.memoryStorage(),
     limits: { fileSize: 15 * 1024 * 1024 }, // 15MB hard limit
     fileFilter: (req, file, cb) => {
-        if (file.mimetype !== 'application/pdf') {
-            return cb(new AppError('Only text-based PDF files are supported', 400), false);
+        const allowedMimes = [
+            'application/pdf',
+            'text/plain',
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'application/vnd.ms-powerpoint',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+        ];
+        if (!allowedMimes.includes(file.mimetype)) {
+            return cb(new AppError('Only PDF, TXT, DOC/DOCX, and PPT/PPTX files are supported', 400), false);
         }
         cb(null, true);
     }

@@ -5,9 +5,16 @@ const pdf = require('pdf-parse');
 
 // Configuration Constants
 const CONFIG = {
-    MAX_TEXT_LENGTH: 30000, // Reduced to stay within Gemini flash token comfort zone
+    MAX_TEXT_LENGTH: 20000, // Reduced to fit within typical 8k token windows
     MAX_TITLE_LENGTH: 200,
-    ALLOWED_MIMES: ['application/pdf'],
+    ALLOWED_MIMES: [
+        'application/pdf',
+        'text/plain',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/vnd.ms-powerpoint',
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+    ],
     MAX_FILE_SIZE: 10 * 1024 * 1024 // 10MB
 };
 
@@ -20,7 +27,7 @@ const callGroq = async (prompt) => {
     if (!process.env.GROQ_API_KEY) throw new Error('Groq Key Missing');
     
     const response = await axios.post('https://api.groq.com/openai/v1/chat/completions', {
-        model: process.env.GROQ_MODEL || "llama-3.3-70b-specdec",
+        model: process.env.GROQ_MODEL || "llama3-70b-8192",
         messages: [{ role: "user", content: prompt }],
         temperature: 0.5,
         max_tokens: parseInt(process.env.MAX_TOKENS_PER_SUMMARY) || 2048
@@ -29,7 +36,7 @@ const callGroq = async (prompt) => {
             'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
             'Content-Type': 'application/json'
         },
-        timeout: 10000 // 10s timeout
+        timeout: 30000 // 30s timeout to handle larger models
     });
 
     return response.data.choices[0].message.content;
@@ -39,8 +46,14 @@ const callGroq = async (prompt) => {
 
 const localSummarize = (text, detailLevel = 'concise') => {
     if (!text) return "No content found.";
-    const sentences = text.split(/[.!?]+\s/).filter(s => s.trim().length > 20);
-    const count = detailLevel === 'detailed' ? 5 : 2;
+    // Improved sentence splitting for PDF text which may have irregular punctuation or newlines
+    const sentences = text.split(/(?<=[.!?])\s+|\n+/).filter(s => s && s.trim().length > 20);
+    
+    if (sentences.length === 0) {
+        return `• ${text.substring(0, 300).trim()}...`;
+    }
+    
+    const count = detailLevel === 'detailed' ? 15 : 3;
     return sentences.slice(0, count).map(s => `• ${s.trim()}`).join('\n');
 };
 
@@ -66,16 +79,33 @@ exports.summarize = async (req, res, next) => {
         let mode = 'text';
         let finalTitle = reqTitle || 'Untitled Summary';
 
-        // 1. PDF Extraction Logic
+        // 1. File Extraction Logic
         if (req.file) {
             if (!CONFIG.ALLOWED_MIMES.includes(req.file.mimetype)) {
-                return res.status(400).json({ error: 'Invalid file type. PDFs only.' });
+                return res.status(400).json({ error: 'Invalid file type.' });
             }
             
-            const pdfData = await pdf(req.file.buffer);
-            textToProcess = pdfData.text.trim();
             mode = 'upload';
-            if (!reqTitle) finalTitle = req.file.originalname.replace('.pdf', '');
+            if (!reqTitle) finalTitle = req.file.originalname.replace(/\.[^/.]+$/, "");
+
+            if (req.file.mimetype === 'application/pdf') {
+                const pdfData = await pdf(req.file.buffer);
+                textToProcess = pdfData.text.trim();
+            } else if (req.file.mimetype === 'text/plain') {
+                textToProcess = req.file.buffer.toString('utf-8').trim();
+            } else {
+                try {
+                    const officeParser = require('officeparser');
+                    textToProcess = await officeParser.parseOfficeAsync(req.file.buffer);
+                    if (textToProcess) textToProcess = textToProcess.trim();
+                } catch (parseError) {
+                    console.error('Office parse error:', parseError);
+                    if (parseError.code === 'MODULE_NOT_FOUND') {
+                        return res.status(500).json({ error: 'Server configuration error: "officeparser" is missing. Please run "npm install officeparser" in the backend directory.' });
+                    }
+                    return res.status(400).json({ error: 'Failed to extract text from this document. Note: Old binary .doc/.ppt files may not be supported.' });
+                }
+            }
         }
 
         if (!textToProcess) {
@@ -90,8 +120,8 @@ exports.summarize = async (req, res, next) => {
         let provider = 'none';
 
         const prompt = detailLevel === 'detailed'
-            ? `Analyze this document and provide a detailed structured summary with Key Points and Conclusion:\n\n${sanitizedInput}`
-            : `Summarize this text into 3 concise bullet points:\n\n${sanitizedInput}`;
+            ? `You are an expert summarizer. Analyze this document thoroughly and provide a highly comprehensive, detailed structured summary. Include an Executive Summary, an extensive list of Key Points covering all major themes, and a thoughtful Conclusion:\n\n${sanitizedInput}`
+            : `Summarize this text into 3 concise bullet points focusing on the most important information:\n\n${sanitizedInput}`;
 
         // Tier 1: Groq (Primary)
         try {
